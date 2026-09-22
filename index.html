@@ -887,69 +887,187 @@
 
   <script>
 
-    function toggleMenu() {
+  // ==========================================
+  // HI-UEO API
+  // ==========================================
 
-      const nav =
-        document.getElementById("mainNav");
+  const API_URL =
+    "MASUKKAN_URL_WORKER_HI-UEO_DI_SINI";
 
-      nav.classList.toggle("active");
+
+  // ==========================================
+  // MENU
+  // ==========================================
+
+  function toggleMenu() {
+
+    const nav =
+      document.getElementById("mainNav");
+
+    nav.classList.toggle("active");
+
+  }
+
+
+  // ==========================================
+  // ENTER
+  // ==========================================
+
+  function handleEnter(event) {
+
+    if (event.key === "Enter") {
+      startChat();
+    }
+
+  }
+
+
+  // ==========================================
+  // CHAT
+  // ==========================================
+
+  async function startChat() {
+
+    const input =
+      document.getElementById("chatInput");
+
+    const text =
+      input.value.trim();
+
+
+    if (!text) {
+
+      input.focus();
+
+      return;
 
     }
 
 
-    function handleEnter(event) {
+    const button =
+      document.querySelector(".send-btn");
 
-      if (event.key === "Enter") {
-        startChat();
+
+    // Simpan tampilan asli
+
+    const originalButton =
+      button.textContent;
+
+
+    // Loading
+
+    button.disabled = true;
+    button.textContent = "⏳";
+
+    input.disabled = true;
+
+
+    try {
+
+      const response =
+        await fetch(
+          API_URL,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+              message: text
+            })
+
+          }
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          data.error ||
+          "Gagal menghubungi HI-UEO."
+        );
+
       }
 
-    }
 
+      if (!data.result) {
 
-    function startChat() {
-
-      const input =
-        document.getElementById("chatInput");
-
-      const text =
-        input.value.trim();
-
-      if (!text) {
-
-        input.focus();
-
-        return;
+        throw new Error(
+          "HI-UEO tidak memberikan jawaban."
+        );
 
       }
+
 
       /*
-        Untuk sementara kita arahkan
-        ke halaman Chat.
-
-        Halaman Chat akan kita buat
-        pada tahap berikutnya.
-      */
+       * Untuk tahap awal kita tampilkan
+       * jawaban menggunakan alert.
+       *
+       * Setelah koneksi berhasil,
+       * kita akan membuat halaman Chat
+       * profesional.
+       */
 
       alert(
-        "HI-UEO Chat akan segera tersedia.\n\n" +
-        "Pertanyaan kamu:\n" +
-        text
+        "HI-UEO:\n\n" +
+        data.result
       );
+
+
+      input.value = "";
+
+
+    } catch (error) {
+
+      console.error(
+        "HI-UEO error:",
+        error
+      );
+
+
+      alert(
+        "❌ HI-UEO tidak dapat menjawab.\n\n" +
+        error.message
+      );
+
+
+    } finally {
+
+      button.disabled = false;
+      button.textContent =
+        originalButton;
+
+      input.disabled = false;
+
+      input.focus();
 
     }
 
+  }
 
-    function openTool(tool) {
 
-      alert(
-        "AI Tool \"" +
-        tool +
-        "\" akan kita bangun pada tahap berikutnya."
-      );
+  // ==========================================
+  // TOOLS SEMENTARA
+  // ==========================================
 
-    }
+  function openTool(tool) {
 
-  </script>
+    alert(
+      "Tool \"" +
+      tool +
+      "\" akan kita bangun pada tahap berikutnya."
+    );
+
+  }
+
+</script>
 
 </body>
 </html>
