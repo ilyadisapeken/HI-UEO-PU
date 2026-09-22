@@ -46,6 +46,18 @@ header{background:linear-gradient(135deg,#087f5b,#12a878);color:#fff;padding:16p
 <div class="tool" onclick="openTool('summary')"><div class="tool-icon">📄</div><h3>Ringkasan</h3><p>Ringkas teks panjang menjadi lebih sederhana.</p></div>
 </div></section>
 
+<section class="section" id="tool-workspace">
+<div class="section-title"><h2>🧰 Workspace AI Tools</h2><p>Pilih tool, isi kebutuhan, lalu jalankan langsung dengan HI-UEO.</p></div>
+<div style="max-width:800px;margin:auto;background:#fff;border:1px solid #e7ebf0;border-radius:18px;padding:18px">
+<label for="toolSelect" style="display:block;font-weight:700;margin-bottom:7px">Pilih Tool</label>
+<select id="toolSelect" style="width:100%;padding:13px;border:1px solid #e5e9ef;border-radius:12px;margin-bottom:12px">
+<option value="product">Deskripsi Produk</option><option value="caption">Caption Jualan</option><option value="content">Ide Konten</option><option value="script">Script Video</option><option value="rewrite">Rewrite</option><option value="summary">Ringkasan</option>
+</select>
+<textarea id="toolInput" rows="5" placeholder="Tulis informasi yang ingin diproses..." style="width:100%;resize:vertical;border:1px solid #e5e9ef;border-radius:12px;padding:13px;font:inherit;outline:none"></textarea>
+<button id="toolRun" onclick="runTool()" style="margin-top:12px;width:100%;border:0;background:#0b9b6d;color:#fff;padding:13px;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer">Jalankan Tool →</button>
+<div id="toolResult" style="margin-top:14px"></div>
+</div></section>
+
 <section class="why" id="why"><div class="section"><div class="section-title"><h2>Mengapa HI-UEO?</h2><p>Dibuat sederhana agar siapa saja bisa menggunakan AI.</p></div><div class="why-grid">
 <div class="why-item"><div class="why-icon">⚡</div><h3>Cepat</h3><p>Dapatkan bantuan AI tanpa proses yang rumit.</p></div>
 <div class="why-item"><div class="why-icon">🇮🇩</div><h3>Bahasa Indonesia</h3><p>Dirancang agar mudah digunakan pengguna Indonesia.</p></div>
@@ -99,9 +111,25 @@ async function regenerate(index){
  await startChat("Berikan jawaban alternatif yang lebih baik untuk permintaan ini: "+userText);
 }
 function clearChat(){if(!history.length)return;if(confirm("Hapus semua percakapan di perangkat ini?")){history=[];saveHistory();renderHistory()}}
+async function runTool(){
+ const select=document.getElementById("toolSelect"), input=document.getElementById("toolInput"), result=document.getElementById("toolResult"), btn=document.getElementById("toolRun");
+ const value=input.value.trim(); if(!value){input.focus();return}
+ const names={product:"deskripsi produk",caption:"caption jualan",content:"ide konten",script:"script video",rewrite:"menulis ulang teks",summary:"ringkasan"};
+ const prompt="Gunakan mode "+(names[select.value]||"AI")+" . Kebutuhan pengguna: "+value;
+ btn.disabled=true;btn.textContent="⏳ Memproses...";result.innerHTML='<div style="padding:14px;background:#f6f8fb;border-radius:12px;color:#667085">HI-UEO sedang memproses...</div>';
+ try{
+  const response=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:prompt})});
+  const data=await response.json();if(!response.ok)throw new Error(data.error||"Gagal memproses.");
+  result.innerHTML='<div style="padding:15px;background:#f1f4f7;border-radius:12px;white-space:pre-wrap">'+escapeHtml(data.result||"Tidak ada hasil.")+'</div><button onclick="copyToolResult()" style="margin-top:8px;border:1px solid #d8dee8;background:#fff;border-radius:8px;padding:7px 10px;cursor:pointer">Salin Hasil</button>';
+  window.lastToolResult=data.result||"";
+ }catch(e){result.innerHTML='<div style="padding:14px;background:#fff1f1;color:#b42318;border-radius:12px">Gagal: '+escapeHtml(e.message)+'</div>'}
+ finally{btn.disabled=false;btn.textContent="Jalankan Tool →"}
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+function copyToolResult(){if(window.lastToolResult)navigator.clipboard?.writeText(window.lastToolResult)}
 function openTool(tool){
  const prompts={business:"Bantu saya membuat ide untuk bisnis/UMKM.",work:"Bantu saya menyelesaikan pekerjaan kantor.",creator:"Bantu saya membuat ide konten.",other:"Bantu saya dengan kebutuhan saya.",product:"Buatkan deskripsi produk yang menarik.",caption:"Buatkan caption jualan yang menarik.",content:"Berikan 10 ide konten untuk saya.",script:"Buatkan script video pendek.",rewrite:"Tulis ulang teks saya agar lebih profesional.",summary:"Bantu saya meringkas teks."};
- const p=prompts[tool]||prompts.other; document.getElementById("chatInput").value=p;document.getElementById("chatInput").focus();window.scrollTo({top:0,behavior:"smooth"});
+ const p=prompts[tool]||prompts.other; document.getElementById("chatInput").value=p;document.getElementById("chatInput").focus();document.getElementById("tool-workspace")?.scrollIntoView({behavior:"smooth",block:"start"});
 }
 renderHistory();
 </script>
