@@ -1,99 +1,107 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="HI-UEO adalah platform AI untuk membantu pekerjaan, bisnis, dan pembuatan konten dengan lebih cepat.">
+<title>HI-UEO — AI untuk Semua Kebutuhan</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f6f8fb;color:#172033;line-height:1.6}
+header{background:linear-gradient(135deg,#087f5b,#12a878);color:#fff;padding:16px 20px;position:sticky;top:0;z-index:20}.header-inner{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between}.logo{font-size:25px;font-weight:800}.logo span,footer span{color:#ffd95a}.menu-btn{background:#ffffff22;border:1px solid #ffffff40;color:#fff;padding:9px 14px;border-radius:10px;cursor:pointer}nav{display:none;gap:25px}nav.active{display:block;position:absolute;left:0;right:0;top:65px;background:#087f5b;padding:12px 20px}nav a{color:#fff;text-decoration:none;padding:8px 0;display:block}
+.hero{padding:48px 20px 30px;text-align:center;background:radial-gradient(circle at top,#12a87822,transparent 45%)}.hero-inner{max-width:900px;margin:auto}.badge{display:inline-block;background:#e4f8f0;color:#087f5b;padding:7px 14px;border-radius:999px;font-size:13px;font-weight:700;margin-bottom:16px}.hero h1{font-size:clamp(36px,8vw,60px);line-height:1.08;letter-spacing:-2px;margin-bottom:16px}.hero h1 span{color:#0b9b6d}.hero p{max-width:650px;margin:auto;color:#667085}
+.chat-panel{max-width:800px;margin:28px auto 0;background:#fff;border:1px solid #e5e9ef;border-radius:20px;box-shadow:0 15px 40px #10182812;overflow:hidden}.chat-messages{max-height:480px;overflow:auto;padding:16px;text-align:left;display:flex;flex-direction:column;gap:12px}.empty{padding:25px;text-align:center;color:#98a2b3;font-size:14px}.message{max-width:88%;padding:12px 14px;border-radius:16px;white-space:pre-wrap;word-break:break-word}.message.user{align-self:flex-end;background:#0b9b6d;color:#fff;border-bottom-right-radius:5px}.message.ai{align-self:flex-start;background:#f1f4f7;color:#172033;border-bottom-left-radius:5px}.message.error{align-self:flex-start;background:#fff1f1;color:#b42318}.message-actions{margin-top:7px;display:flex;gap:6px}.message-actions button{border:1px solid #d8dee8;background:#fff;border-radius:8px;padding:5px 9px;font-size:12px;cursor:pointer;color:#475467}.chat-box{display:flex;gap:8px;padding:12px;border-top:1px solid #e5e9ef}.chat-box input{flex:1;border:1px solid #e5e9ef;border-radius:13px;outline:none;padding:14px;font-size:16px;min-width:0}.send-btn{border:0;background:#0b9b6d;color:#fff;width:52px;height:52px;border-radius:14px;font-size:20px;cursor:pointer}.send-btn:disabled{opacity:.6}.chat-tools{display:flex;justify-content:space-between;padding:0 14px 12px;font-size:12px}.chat-tools button{border:0;background:none;color:#667085;cursor:pointer}.chat-note{margin-top:10px;font-size:12px;color:#98a2b3}
+.section{max-width:1100px;margin:auto;padding:42px 20px}.section-title{text-align:center;margin-bottom:24px}.section-title h2{font-size:30px;margin-bottom:6px}.section-title p{color:#667085}.categories,.tools-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.category,.tool{background:#fff;border:1px solid #e7ebf0;border-radius:16px;padding:19px;cursor:pointer;transition:.2s}.category:hover,.tool:hover{transform:translateY(-2px);box-shadow:0 10px 25px #10182810}.category-icon,.tool-icon{font-size:28px;margin-bottom:8px}.category p,.tool p,.why-item p{color:#667085;font-size:14px}.tool h3,.category h3{font-size:16px;margin-bottom:4px}.why{background:#fff}.why-grid{max-width:900px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.why-item{text-align:center;padding:20px}.why-icon{font-size:30px;margin-bottom:8px}footer{background:#101828;color:#fff;padding:32px 20px;text-align:center}footer .footer-logo{font-size:23px;font-weight:800;margin-bottom:8px}footer p{color:#98a2b3;font-size:13px}
+@media(min-width:700px){.menu-btn{display:none}nav{display:flex}nav.active{position:static;background:none;padding:0}.categories{grid-template-columns:repeat(4,1fr)}.tools-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:600px){.hero{padding-top:38px}.hero h1{font-size:40px}.why-grid{grid-template-columns:1fr}.section{padding:35px 15px}.message{max-width:94%}}
+</style>
+</head>
+<body>
+<header><div class="header-inner"><div class="logo">HI-<span>UEO</span></div><button class="menu-btn" onclick="toggleMenu()">☰ Menu</button><nav id="mainNav"><a href="#">Beranda</a><a href="#tools">AI Tools</a><a href="#why">Tentang</a></nav></div></header>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<section class="hero"><div class="hero-inner">
+<div class="badge">✨ AI untuk kebutuhan sehari-hari</div>
+<h1>AI yang membantu kamu <span>bekerja lebih cepat.</span></h1>
+<p>Tanya apa saja, buat konten, bantu pekerjaan, kembangkan bisnis, dan gunakan berbagai AI Tools dalam satu tempat.</p>
+<div class="chat-panel">
+<div id="chatMessages" class="chat-messages"><div class="empty">Mulai percakapan dengan HI-UEO.<br>Contoh: “Buatkan ide bisnis untuk pemula.”</div></div>
+<div class="chat-box"><input id="chatInput" type="text" placeholder="Apa yang ingin kamu lakukan?" onkeydown="handleEnter(event)"><button id="sendBtn" class="send-btn" onclick="startChat()">➤</button></div>
+<div class="chat-tools"><button onclick="clearChat()">Hapus percakapan</button><span>HI-UEO AI</span></div>
+</div><div class="chat-note">Percakapan tersimpan di perangkat ini.</div>
+</div></section>
 
-  <meta
-    name="description"
-    content="HI-UEO adalah platform AI untuk membantu pekerjaan, bisnis, dan pembuatan konten dengan lebih cepat."
-  >
+<section class="section" id="tools"><div class="section-title"><h2>⚡ AI Tools</h2><p>Pilih alat AI sesuai kebutuhan kamu.</p></div><div class="categories">
+<div class="category" onclick="openTool('business')"><div class="category-icon">💼</div><h3>Bisnis</h3><p>Bantu jualan, promosi, produk, dan usaha.</p></div>
+<div class="category" onclick="openTool('work')"><div class="category-icon">📝</div><h3>Kerja</h3><p>Email, surat, ringkasan, dan pekerjaan kantor.</p></div>
+<div class="category" onclick="openTool('creator')"><div class="category-icon">🎬</div><h3>Kreator</h3><p>Ide konten, script, judul, dan caption.</p></div>
+<div class="category" onclick="openTool('other')"><div class="category-icon">✨</div><h3>Lainnya</h3><p>Berbagai kebutuhan AI lainnya.</p></div>
+</div></section>
 
-  <title>HI-UEO — AI untuk Semua Kebutuhan</title>
+<section class="section"><div class="section-title"><h2>🔥 Tool Populer</h2><p>Gunakan prompt siap pakai untuk mempercepat pekerjaan.</p></div><div class="tools-grid">
+<div class="tool" onclick="openTool('product')"><div class="tool-icon">🛍️</div><h3>Deskripsi Produk</h3><p>Buat deskripsi produk yang menarik.</p></div>
+<div class="tool" onclick="openTool('caption')"><div class="tool-icon">📱</div><h3>Caption Jualan</h3><p>Buat caption untuk promosi produk.</p></div>
+<div class="tool" onclick="openTool('content')"><div class="tool-icon">💡</div><h3>Ide Konten</h3><p>Temukan ide konten dengan bantuan AI.</p></div>
+<div class="tool" onclick="openTool('script')"><div class="tool-icon">🎥</div><h3>Script Video</h3><p>Buat script video untuk konten.</p></div>
+<div class="tool" onclick="openTool('rewrite')"><div class="tool-icon">✍️</div><h3>Rewrite</h3><p>Tulis ulang teks dengan gaya berbeda.</p></div>
+<div class="tool" onclick="openTool('summary')"><div class="tool-icon">📄</div><h3>Ringkasan</h3><p>Ringkas teks panjang menjadi lebih sederhana.</p></div>
+</div></section>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<section class="why" id="why"><div class="section"><div class="section-title"><h2>Mengapa HI-UEO?</h2><p>Dibuat sederhana agar siapa saja bisa menggunakan AI.</p></div><div class="why-grid">
+<div class="why-item"><div class="why-icon">⚡</div><h3>Cepat</h3><p>Dapatkan bantuan AI tanpa proses yang rumit.</p></div>
+<div class="why-item"><div class="why-icon">🇮🇩</div><h3>Bahasa Indonesia</h3><p>Dirancang agar mudah digunakan pengguna Indonesia.</p></div>
+<div class="why-item"><div class="why-icon">🧰</div><h3>Banyak Tools</h3><p>Chat AI dan berbagai AI Tools dalam satu tempat.</p></div>
+</div></div></section>
+<footer><div class="footer-logo">HI-<span>UEO</span></div><p>AI yang membantu kamu bekerja lebih cepat.</p><p style="margin-top:8px">© 2026 HI-UEO</p></footer>
 
-    body {
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
+<script>
+const API_URL="https://hi-ueo-api.ilyadisapeken.workers.dev/";
+const STORAGE_KEY="hi_ueo_chat_history";
+let history=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
 
-      background: #f6f8fb;
-      color: #172033;
-      line-height: 1.6;
-    }
-
-    
-
-      showChatMessage(data.result, "ai");
-
-
-      input.value = "";
-
-
-    } catch (error) {
-
-      console.error(
-        "HI-UEO error:",
-        error
-      );
-
-
-      showChatMessage("Maaf, terjadi kesalahan: " + error.message, "error");
-
-
-    } finally {
-
-      button.disabled = false;
-      button.textContent =
-        originalButton;
-
-      input.disabled = false;
-
-      input.focus();
-
-    }
-
-  }
-
-
-  // ==========================================
-  // TOOLS SEMENTARA
-  // ==========================================
-
-  function openTool(tool) {
-    const prompts = {
-      business: "Bantu saya membuat ide untuk bisnis/UMKM.",
-      work: "Bantu saya menyelesaikan pekerjaan kantor.",
-      creator: "Bantu saya membuat ide konten.",
-      other: "Bantu saya dengan kebutuhan saya.",
-      product: "Buatkan deskripsi produk yang menarik.",
-      caption: "Buatkan caption jualan yang menarik.",
-      content: "Berikan 10 ide konten untuk saya.",
-      script: "Buatkan script video pendek.",
-      rewrite: "Tulis ulang teks saya agar lebih profesional.",
-      summary: "Bantu saya meringkas teks."
-    };
-
-    const input = document.getElementById("chatInput");
-    input.value = prompts[tool] || "Bantu saya dengan kebutuhan saya.";
-    input.focus();
-  }
-
+function toggleMenu(){document.getElementById("mainNav").classList.toggle("active")}
+function handleEnter(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();startChat()}}
+function saveHistory(){localStorage.setItem(STORAGE_KEY,JSON.stringify(history))}
+function renderHistory(){
+ const box=document.getElementById("chatMessages"); box.innerHTML="";
+ if(!history.length){box.innerHTML='<div class="empty">Mulai percakapan dengan HI-UEO.<br>Contoh: “Buatkan ide bisnis untuk pemula.”</div>';return}
+ history.forEach((m,i)=>addMessage(m.role,m.text,i,false));
+ box.scrollTop=box.scrollHeight;
+}
+function addMessage(role,text,index=-1,scroll=true){
+ const box=document.getElementById("chatMessages"), wrap=document.createElement("div");
+ wrap.className="message "+role; wrap.textContent=text; box.appendChild(wrap);
+ if(role==="ai"){
+   const actions=document.createElement("div"); actions.className="message-actions";
+   const copy=document.createElement("button"); copy.textContent="Salin"; copy.onclick=()=>navigator.clipboard?.writeText(text);
+   const regen=document.createElement("button"); regen.textContent="Regenerate"; regen.onclick=()=>regenerate(index);
+   actions.append(copy,regen); wrap.appendChild(actions);
+ }
+ if(scroll)box.scrollTop=box.scrollHeight;
+}
+function showMessage(role,text){addMessage(role,text);history.push({role,text});saveHistory()}
+async function startChat(customPrompt=null){
+ const input=document.getElementById("chatInput"), button=document.getElementById("sendBtn");
+ const text=(customPrompt||input.value).trim(); if(!text)return;
+ showMessage("user",text); input.value=""; input.disabled=true; button.disabled=true; button.textContent="⏳";
+ try{
+  const response=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:text})});
+  const data=await response.json(); if(!response.ok)throw new Error(data.error||"Gagal menghubungi HI-UEO.");
+  if(!data.result)throw new Error("HI-UEO tidak memberikan jawaban.");
+  showMessage("ai",data.result);
+ }catch(e){showMessage("error","Maaf, terjadi kesalahan: "+e.message)}
+ finally{input.disabled=false;button.disabled=false;button.textContent="➤";input.focus()}
+}
+async function regenerate(index){
+ if(index<0||!history[index])return;
+ let userText="";
+ for(let i=index-1;i>=0;i--){if(history[i].role==="user"){userText=history[i].text;break}}
+ if(!userText)return;
+ await startChat("Berikan jawaban alternatif yang lebih baik untuk permintaan ini: "+userText);
+}
+function clearChat(){if(!history.length)return;if(confirm("Hapus semua percakapan di perangkat ini?")){history=[];saveHistory();renderHistory()}}
+function openTool(tool){
+ const prompts={business:"Bantu saya membuat ide untuk bisnis/UMKM.",work:"Bantu saya menyelesaikan pekerjaan kantor.",creator:"Bantu saya membuat ide konten.",other:"Bantu saya dengan kebutuhan saya.",product:"Buatkan deskripsi produk yang menarik.",caption:"Buatkan caption jualan yang menarik.",content:"Berikan 10 ide konten untuk saya.",script:"Buatkan script video pendek.",rewrite:"Tulis ulang teks saya agar lebih profesional.",summary:"Bantu saya meringkas teks."};
+ const p=prompts[tool]||prompts.other; document.getElementById("chatInput").value=p;document.getElementById("chatInput").focus();window.scrollTo({top:0,behavior:"smooth"});
+}
+renderHistory();
 </script>
-
 </body>
 </html>
