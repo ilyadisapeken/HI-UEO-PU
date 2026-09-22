@@ -15,16 +15,18 @@ header{background:linear-gradient(135deg,#087f5b,#12a878);color:#fff;padding:16p
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div class="logo">HI-<span>UEO</span></div><button class="menu-btn" onclick="toggleMenu()">☰ Menu</button><nav id="mainNav"><a href="#">Beranda</a><a href="#tools">AI Tools</a><a href="#why">Tentang</a></nav></div></header>
+<header><div class="header-inner"><div class="logo">HI-<span>UEO</span></div><button class="menu-btn" onclick="toggleMenu()">☰ Menu</button><nav id="mainNav">
+<a href="#home">Beranda</a><a href="#chat">AI Chat</a><a href="#tools">AI Tools</a><a href="#why">Tentang</a>
+</nav></div></header>
 
-<section class="hero"><div class="hero-inner">
-<div class="badge">✨ AI untuk kebutuhan sehari-hari</div>
+<section class="hero" id="home"><div class="hero-inner">
+<div class="badge">✨ HI-UEO AI Platform</div>
 <h1>AI yang membantu kamu <span>bekerja lebih cepat.</span></h1>
-<p>Tanya apa saja, buat konten, bantu pekerjaan, kembangkan bisnis, dan gunakan berbagai AI Tools dalam satu tempat.</p>
-<div class="chat-panel">
+<p>Tanya apa saja, buat konten, bantu pekerjaan, kembangkan bisnis, dan gunakan berbagai AI Tools dalam satu tempat.</p><div style="margin:22px auto 0;display:flex;justify-content:center;gap:8px;flex-wrap:wrap"><span style="padding:7px 12px;background:#fff;border:1px solid #e5e9ef;border-radius:999px;font-size:12px;color:#667085">💬 AI Chat</span><span style="padding:7px 12px;background:#fff;border:1px solid #e5e9ef;border-radius:999px;font-size:12px;color:#667085">🧰 AI Tools</span><span style="padding:7px 12px;background:#fff;border:1px solid #e5e9ef;border-radius:999px;font-size:12px;color:#667085">🇮🇩 Bahasa Indonesia</span></div>
+<div class="chat-panel" id="chat">
 <div id="chatMessages" class="chat-messages"><div class="empty">Mulai percakapan dengan HI-UEO.<br>Contoh: “Buatkan ide bisnis untuk pemula.”</div></div>
 <div class="chat-box"><input id="chatInput" type="text" placeholder="Apa yang ingin kamu lakukan?" onkeydown="handleEnter(event)"><button id="sendBtn" class="send-btn" onclick="startChat()">➤</button></div>
-<div class="chat-tools"><button onclick="clearChat()">Hapus percakapan</button><span>HI-UEO AI</span></div>
+<div class="chat-tools"><button onclick="clearChat()">Hapus percakapan</button><button onclick="document.getElementById(&quot;chatInput&quot;).focus()">Fokus Chat</button><span>HI-UEO AI</span></div>
 </div><div class="chat-note">Percakapan tersimpan di perangkat ini.</div>
 </div></section>
 
