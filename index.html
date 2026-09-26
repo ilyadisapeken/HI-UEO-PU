@@ -49,9 +49,16 @@ const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const API_URL="https://hi-ueo-api.ilyadisapeken.workers.dev/";
 const USAGE_GATE_URL=SUPABASE_URL+"/functions/v1/usage-gate";
 async function consumeUsage(type){
- if(!currentUser)return true;
- const token=(await supabaseClient.auth.getSession()).data.session?.access_token;
- if(!token)return true;
+ if(!currentUser){
+  openAuth();
+  throw new Error("Silakan masuk atau daftar terlebih dahulu untuk menggunakan fitur AI.");
+ }
+ const session=(await supabaseClient.auth.getSession()).data.session;
+ const token=session?.access_token;
+ if(!token){
+  openAuth();
+  throw new Error("Sesi login tidak ditemukan. Silakan masuk kembali.");
+ }
  const r=await fetch(USAGE_GATE_URL,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({usage_type:type})});
  const d=await r.json().catch(()=>({}));
  if(!r.ok||!d.allowed)throw new Error(d.error||("Limit "+type+" tercapai. Paket: "+(d.plan||"free")));
