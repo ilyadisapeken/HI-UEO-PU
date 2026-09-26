@@ -59,19 +59,39 @@ const USAGE_GATE_URL=SUPABASE_URL+"/functions/v1/usage-gate";
 async function apiRequest(path,options={}){
  const session=(await supabaseClient.auth.getSession()).data.session;
  if(!session?.access_token)throw new Error("Sesi login tidak ditemukan. Silakan masuk kembali.");
- const headers=new Headers(options.headers||{});
- headers.set("Authorization","Bearer "+session.access_token);
- headers.set("Content-Type","application/json");
- let response;
+ let body=options.body;
+ if(typeof body==="string"){try{body=JSON.parse(body)}catch{}}
  try{
-  response=await fetch(API_URL+String(path||"").replace(/^\//,""),{...options,headers});
- }catch(e){throw new Error("Server HI-UEO tidak dapat dihubungi. Coba lagi beberapa saat.");}
- if(response.status===401){
-  await supabaseClient.auth.refreshSession().catch(()=>null);
-  currentUser=null;
-  updateAuthUI();
+  const {data,error}=await supabaseClient.functions.invoke("hi-ueo-proxy",{
+   body:body||{},
+   headers:{"Content-Type":"application/json"}
+  });
+  if(error){
+   const status=error.context?.status||500;
+   if(status===401){
+    await supabaseClient.auth.refreshSession().catch(()=>null);
+    currentUser=null;
+    updateAuthUI();
+    throw new Error("Sesi login sudah berakhir. Silakan masuk kembali.");
+   }
+   let message=error.message||"Server HI-UEO tidak dapat dihubungi.";
+   try{
+    const payload=await error.context?.json();
+    message=payload?.error||payload?.message||message;
+   }catch{}
+   return new Response(JSON.stringify({error:message}),{
+    status,
+    headers:{"Content-Type":"application/json"}
+   });
+  }
+  return new Response(JSON.stringify(data??{}),{
+   status:200,
+   headers:{"Content-Type":"application/json"}
+  });
+ }catch(e){
+  if(e instanceof Error&&e.message)throw e;
+  throw new Error("Server HI-UEO tidak dapat dihubungi. Coba lagi beberapa saat.");
  }
- return response;
 }
 async function consumeUsage(type){
  if(!currentUser){
