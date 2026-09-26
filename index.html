@@ -61,6 +61,12 @@ async function apiRequest(path,options={}){
  const contentType=response.headers.get("content-type")||"";
  let data=null;
  try{data=contentType.includes("application/json")?await response.json():await response.text();}catch{}
+ if(response.status===401){
+  await supabaseClient.auth.refreshSession().catch(()=>null);
+  currentUser=null;
+  updateAuthUI();
+  throw new Error("Sesi login sudah berakhir. Silakan masuk kembali.");
+ }
  if(!response.ok){
   const message=(data&&typeof data==="object"&&(data.error||data.message))||(typeof data==="string"&&data.trim())||("Permintaan gagal ("+response.status+").");
   throw new Error(message);
