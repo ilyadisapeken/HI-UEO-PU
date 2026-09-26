@@ -54,8 +54,6 @@ footer{background:#101828;color:#fff;padding:32px 20px;text-align:center}footer 
 const SUPABASE_URL="https://hopoobjrlohexluzxytn.supabase.co";
 const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhvcG9vYmpybG9oZXhsdXp4eXRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAwOTUxMDMsImV4cCI6MjEwNTY3MTEwM30.wgVtRzNZ5ydq9crIxOMxyz9nO1qm-r5hvsBuVyjJRwY";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const API_URL=SUPABASE_URL+"/functions/v1/hi-ueo-proxy";
-const USAGE_GATE_URL=SUPABASE_URL+"/functions/v1/usage-gate";
 async function apiRequest(path,options={}){
  const session=(await supabaseClient.auth.getSession()).data.session;
  if(!session?.access_token)throw new Error("Sesi login tidak ditemukan. Silakan masuk kembali.");
