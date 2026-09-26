@@ -54,7 +54,18 @@ async function apiRequest(path,options={}){
  const headers=new Headers(options.headers||{});
  headers.set("Authorization","Bearer "+session.access_token);
  headers.set("Content-Type","application/json");
- return fetch(API_URL+String(path||"").replace(/^\\//,""),{...options,headers});
+ let response;
+ try{
+  response=await fetch(API_URL+String(path||"").replace(/^\\//,""),{...options,headers});
+ }catch(e){throw new Error("Server HI-UEO tidak dapat dihubungi. Coba lagi beberapa saat.");}
+ const contentType=response.headers.get("content-type")||"";
+ let data=null;
+ try{data=contentType.includes("application/json")?await response.json():await response.text();}catch{}
+ if(!response.ok){
+  const message=(data&&typeof data==="object"&&(data.error||data.message))||(typeof data==="string"&&data.trim())||("Permintaan gagal ("+response.status+").");
+  throw new Error(message);
+ }
+ return data;
 }
 async function consumeUsage(type){
  if(!currentUser){
