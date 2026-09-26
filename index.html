@@ -56,7 +56,7 @@ async function apiRequest(path,options={}){
  headers.set("Content-Type","application/json");
  let response;
  try{
-  response=await fetch(API_URL+String(path||"").replace(/^\\//,""),{...options,headers});
+  response=await fetch(API_URL+String(path||"").replace(/^\//,""),{...options,headers});
  }catch(e){throw new Error("Server HI-UEO tidak dapat dihubungi. Coba lagi beberapa saat.");}
  const contentType=response.headers.get("content-type")||"";
  let data=null;
