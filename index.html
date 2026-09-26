@@ -99,15 +99,33 @@ async function consumeUsage(type){
   throw new Error("Silakan masuk atau daftar terlebih dahulu untuk menggunakan fitur AI.");
  }
  const session=(await supabaseClient.auth.getSession()).data.session;
- const token=session?.access_token;
- if(!token){
+ if(!session?.access_token){
   openAuth();
   throw new Error("Sesi login tidak ditemukan. Silakan masuk kembali.");
  }
- const r=await fetch(USAGE_GATE_URL,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({usage_type:type})});
- const d=await r.json().catch(()=>({}));
- if(!r.ok||!d.allowed)throw new Error(d.error||("Limit "+type+" tercapai. Paket: "+(d.plan||"free")));
- return true;
+ try{
+  const {data,error}=await supabaseClient.functions.invoke("usage-gate",{
+   body:{usage_type:type},
+   headers:{"Content-Type":"application/json"}
+  });
+  if(error){
+   if(error.context?.status===401){
+    await supabaseClient.auth.refreshSession().catch(()=>null);
+    throw new Error("Sesi login sudah berakhir. Silakan masuk kembali.");
+   }
+   let message=error.message||"Gagal memeriksa akses penggunaan AI.";
+   try{
+    const payload=await error.context?.json();
+    message=payload?.error||payload?.message||message;
+   }catch{}
+   throw new Error(message);
+  }
+  if(!data?.allowed)throw new Error(data?.error||("Limit "+type+" tercapai. Paket: "+(data?.plan||"free")));
+  return true;
+ }catch(e){
+  if(e instanceof Error&&e.message)throw e;
+  throw new Error("Gagal memeriksa akses penggunaan AI. Coba lagi beberapa saat.");
+ }
 }
 
 const STORAGE_KEY="hi_ueo_chat_history",PROFILE_KEY="hi_ueo_profile",TOOL_HISTORY_KEY="hi_ueo_tool_history",AGENT_KEY="hi_ueo_agents";
