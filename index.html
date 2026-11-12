@@ -59,6 +59,7 @@ async function apiRequest(path,options={}){
  if(!session?.access_token)throw new Error("Sesi login tidak ditemukan. Silakan masuk kembali.");
  let body=options.body;
  if(typeof body==="string"){try{body=JSON.parse(body)}catch{}}
+ if(activeQuotaTicket && body && typeof body==="object") body={...body,quota_ticket:activeQuotaTicket};
  try{
   const {data,error}=await supabaseClient.functions.invoke("hi-ueo-proxy",{
    body:body||{},
@@ -119,6 +120,8 @@ async function consumeUsage(type){
    throw new Error(message);
   }
   if(!data?.allowed)throw new Error(data?.error||("Limit "+type+" tercapai. Paket: "+(data?.plan||"free")));
+  if(!data?.ticket)throw new Error("Otorisasi penggunaan tidak diterbitkan server.");
+  activeQuotaTicket=data.ticket;
   return true;
  }catch(e){
   if(e instanceof Error&&e.message)throw e;
@@ -127,7 +130,7 @@ async function consumeUsage(type){
 }
 
 const STORAGE_KEY="hi_ueo_chat_history",PROFILE_KEY="hi_ueo_profile",TOOL_HISTORY_KEY="hi_ueo_tool_history",AGENT_KEY="hi_ueo_agents";
-let currentUser=null,sessionGeneration=0,history=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]"),toolHistory=JSON.parse(localStorage.getItem(TOOL_HISTORY_KEY)||"[]"),lastToolResult="",activeTool="product",chatAbortController=null,chatBusy=false,authMode="login",recoveryMode=false;window._onlineAgents=[];
+let activeQuotaTicket="",currentUser=null,sessionGeneration=0,history=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]"),toolHistory=JSON.parse(localStorage.getItem(TOOL_HISTORY_KEY)||"[]"),lastToolResult="",activeTool="product",chatAbortController=null,chatBusy=false,authMode="login",recoveryMode=false;window._onlineAgents=[];
 
 const TOOLS={
 product:{icon:"🛍️",title:"Deskripsi Produk",desc:"Buat deskripsi produk yang jelas, menarik, dan siap digunakan.",button:"Jalankan Deskripsi Produk →",label:"Informasi produk",placeholder:"Contoh: Nama produk, bahan, ukuran, keunggulan, target pembeli, harga...",helper:"Semakin lengkap informasinya, semakin relevan hasilnya.",presets:["Gaya marketplace","Gaya premium","Singkat"],instruction:"Buat deskripsi produk profesional dalam Bahasa Indonesia. Strukturkan dengan nama/judul produk, manfaat utama, fitur penting, dan ajakan membeli. Jangan mengarang fakta produk yang tidak diberikan. Gunakan bahasa natural, jelas, persuasif, dan cocok untuk marketplace."},
